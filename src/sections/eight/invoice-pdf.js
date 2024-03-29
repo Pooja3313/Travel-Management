@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-import { Page, View, Text, Image, Document, Font, StyleSheet } from '@react-pdf/renderer';
-// utils
+import { Page, View, Text, Image as ImagePdf, Document, Font, StyleSheet } from '@react-pdf/renderer';
+// 
+import Stack from '@mui/material/Stack';
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
-import {_invoices } from 'src/_mock';
+import { _invoices } from 'src/_mock';
+import Image from 'src/components/image';
 
 // ----------------------------------------------------------------------
 
@@ -82,14 +84,20 @@ const useStyles = () =>
       }),
     []
   );
-
+  const renderImages = (coverUrl) => (
+    <Stack spacing={0.5} direction="row" sx={{ p: (theme) => theme.spacing(1, 1, 0, 1) }}>
+      <Stack spacing={0.5}>
+        <Image alt="Cover Image" src={coverUrl} ratio="1/1" sx={{ borderRadius: 1, width: 80 }} />
+      </Stack>
+    </Stack>
+  );
 // ----------------------------------------------------------------------
 
 export default function InvoicePDF({ invoice, currentStatus }) {
   const {
     items,
     EmpID,
-    from, 
+    from,
     to,
     startDate,
     endDate,
@@ -97,7 +105,6 @@ export default function InvoicePDF({ invoice, currentStatus }) {
     invoiceFrom,
     invoiceNumber,
     subTotal,
-    
   } = invoice;
 
   const styles = useStyles();
@@ -106,7 +113,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={[styles.gridContainer, styles.mb40]}>
-          <Image source="/logo/logo_single.png" style={{ width: 48, height: 48 }} />
+          <ImagePdf source="/logo/logo_single.png" style={{ width: 48, height: 48 }} />
 
           <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
             <Text style={styles.h3}>{currentStatus}</Text>
@@ -131,7 +138,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
         </View>
 
         <View style={[styles.gridContainer, styles.mb40]}>
-        <View style={styles.col6}>
+          <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>Employee ID</Text>
             <Text style={styles.body2}>{EmpID}</Text>
           </View>
@@ -165,19 +172,15 @@ export default function InvoicePDF({ invoice, currentStatus }) {
               <View style={styles.tableCell_2}>
                 <Text style={styles.subtitle2}>Title</Text>
               </View>
-              <View style={styles.tableCell_2}>
+              <View style={styles.tableCell_3}>
                 <Text style={styles.subtitle2}>Upload File</Text>
               </View>
-              <View style={styles.tableCell_2}>
-                <Text style={styles.subtitle2}>service</Text>
-              </View>
 
-
-              <View style={styles.tableCell_3}>
+              <View  style={[styles.tableCell_3, styles.alignRight]} >
                 <Text style={styles.subtitle2}>Qty</Text>
               </View>
 
-              <View style={styles.tableCell_3}>
+              <View style={[styles.tableCell_3, styles.alignRight]}>
                 <Text style={styles.subtitle2}>Unit price</Text>
               </View>
 
@@ -196,23 +199,17 @@ export default function InvoicePDF({ invoice, currentStatus }) {
 
                 <View style={styles.tableCell_2}>
                   <Text style={styles.subtitle2}>{item.title}</Text>
-                  {/* <Text>{item.description}</Text> */}
-                </View>
-                <View style={styles.tableCell_2}>
-                  <Text style={styles.subtitle2}>{item.coverUrl}</Text>
-                  {/* <Text>{item.description}</Text> */}
-                </View>
-                
-                <View style={styles.tableCell_2}>
-                  <Text style={styles.subtitle2}>{item.service}</Text>
-                  {/* <Text>{item.description}</Text> */}
                 </View>
                 <View style={styles.tableCell_3}>
-                  <Text>{item.quantity}</Text>
+                  <Text style={styles.subtitle2}>{renderImages(item.coverUrl)}</Text>
                 </View>
 
-                <View style={styles.tableCell_3}>
-                  <Text>{item.price}</Text>
+                <View  style={[styles.tableCell_3, styles.alignRight]}>
+                  <Text style={styles.subtitle2}>{item.quantity}</Text>
+                </View>
+
+                <View style={[styles.tableCell_3, styles.alignRight]}>
+                  <Text style={styles.subtitle2}>{item.price}</Text>
                 </View>
 
                 <View style={[styles.tableCell_3, styles.alignRight]}>
@@ -221,7 +218,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
               </View>
             ))}
 
-            <View style={[styles.tableRow, styles.noBorder]}>
+            {/* <View style={[styles.tableRow, styles.noBorder]}>
               <View style={styles.tableCell_1} />
               <View style={styles.tableCell_2} />
               <View style={styles.tableCell_3} />
@@ -231,68 +228,19 @@ export default function InvoicePDF({ invoice, currentStatus }) {
               <View style={[styles.tableCell_3, styles.alignRight]}>
                 <Text>{fCurrency(subTotal)}</Text>
               </View>
-            </View>
-
-            {/* <View style={[styles.tableRow, styles.noBorder]}>
-              <View style={styles.tableCell_1} />
-              <View style={styles.tableCell_2} />
-              <View style={styles.tableCell_3} />
-              <View style={styles.tableCell_3}>
-                <Text>Shipping</Text>
-              </View>
-              <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(-shipping)}</Text>
-              </View>
-            </View>
-
+              
+            </View> */}
             <View style={[styles.tableRow, styles.noBorder]}>
               <View style={styles.tableCell_1} />
               <View style={styles.tableCell_2} />
               <View style={styles.tableCell_3} />
               <View style={styles.tableCell_3}>
-                <Text>Discount</Text>
+                <Text style={styles.h4}>SubTotal</Text>
               </View>
               <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(-discount)}</Text>
+                <Text style={styles.h4}>{fCurrency(subTotal)}</Text>
               </View>
             </View>
-
-            <View style={[styles.tableRow, styles.noBorder]}>
-              <View style={styles.tableCell_1} />
-              <View style={styles.tableCell_2} />
-              <View style={styles.tableCell_3} />
-              <View style={styles.tableCell_3}>
-                <Text>Taxes</Text>
-              </View>
-              <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(taxes)}</Text>
-              </View>
-            </View> */}
-
-            {/* <View style={[styles.tableRow, styles.noBorder]}>
-              <View style={styles.tableCell_1} />
-              <View style={styles.tableCell_2} />
-              <View style={styles.tableCell_3} />
-              <View style={styles.tableCell_3}>
-                <Text style={styles.h4}>Total</Text>
-              </View>
-              <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text style={styles.h4}>{fCurrency(totalAmount)}</Text>
-              </View>
-            </View> */}
-          </View>
-        </View>
-
-        <View style={[styles.gridContainer, styles.footer]} fixed>
-          <View style={styles.col8}>
-            <Text style={styles.subtitle2}>NOTES</Text>
-            <Text>
-              We appreciate your business. Should you need us to add VAT or extra notes let us know!
-            </Text>
-          </View>
-          <View style={[styles.col4, styles.alignRight]}>
-            <Text style={styles.subtitle2}>Have a Question?</Text>
-            <Text>support@abcapp.com</Text>
           </View>
         </View>
       </Page>

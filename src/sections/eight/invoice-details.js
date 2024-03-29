@@ -23,7 +23,9 @@ import { _invoices, INVOICE_STATUS_OPTIONS } from 'src/_mock';
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
 //
+import Image from 'src/components/image';
 import InvoiceToolbar from './invoice-toolbar';
+
 
 // ----------------------------------------------------------------------
 
@@ -39,20 +41,24 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function InvoiceDetails({ invoice }) {
-  
-
   const [currentStatus, setCurrentStatus] = useState(invoice.status);
- 
  
   const handleChangeStatus = useCallback((event) => {
     setCurrentStatus(event.target.value);
   }, []);
-
+  const renderImages = (coverUrl) => (
+    <Stack spacing={0.5} direction="row" sx={{ p: (theme) => theme.spacing(1, 1, 0, 1) }}>
+      <Stack spacing={0.5}>
+        <Image alt="Cover Image" src={coverUrl} ratio="1/1" sx={{ borderRadius: 1, width: 80 }} />
+      </Stack>
+    </Stack>
+  );
+  
   const renderTotal = (
     <>
-      <StyledTableRow>
+      {/* <StyledTableRow>
         <TableCell colSpan={3} />
-        <TableCell sx={{ color: 'text.secondary' }}>
+        <TableCell sx={{ fontSize: 15, color: 'text.primary' }}>
           <Box sx={{ mt: 2 }} />
           Subtotal
         </TableCell>
@@ -60,42 +66,17 @@ export default function InvoiceDetails({ invoice }) {
           <Box sx={{ mt: 2 }} />
           {fCurrency(invoice.subTotal)}
         </TableCell>
-      </StyledTableRow>
-
-      {/* <StyledTableRow>
-        <TableCell colSpan={3} />
-        <TableCell sx={{ color: 'text.secondary' }}>Shipping</TableCell>
-        <TableCell width={120} sx={{ color: 'error.main', typography: 'body2' }}>
-          {fCurrency(-invoice.shipping)}
-        </TableCell>
       </StyledTableRow> */}
-
-      {/* <StyledTableRow>
+      <StyledTableRow>
         <TableCell colSpan={3} />
-        <TableCell sx={{ color: 'text.secondary' }}>Discount</TableCell>
-        <TableCell width={120} sx={{ color: 'error.main', typography: 'body2' }}>
-          {fCurrency(-invoice.discount)}
-        </TableCell>
-      </StyledTableRow> */}
-
-      {/* <StyledTableRow>
-        <TableCell colSpan={3} />
-        <TableCell sx={{ color: 'text.secondary' }}>Taxes</TableCell>
-        <TableCell width={120}>{fCurrency(invoice.taxes)}</TableCell>
-      </StyledTableRow> */}
-
-      {/* <StyledTableRow>
-        <TableCell colSpan={3} />
-        <TableCell sx={{ typography: 'subtitle1' }}>Total</TableCell>
+        <TableCell sx={{ typography: 'subtitle1' }}>SubTotal</TableCell>
         <TableCell width={140} sx={{ typography: 'subtitle1' }}>
-          {fCurrency(invoice.totalAmount)}
+          {fCurrency(invoice.subTotal)}
         </TableCell>
-      </StyledTableRow> */}
+      </StyledTableRow>
+   
     </>
   );
-
-  
-
   const renderList = (
     <TableContainer sx={{ overflow: 'unset', mt: 5 }}>
       <Scrollbar>
@@ -105,13 +86,14 @@ export default function InvoiceDetails({ invoice }) {
               <TableCell width={40}>#</TableCell>
 
               <TableCell sx={{ typography: 'subtitle2' }}>Title</TableCell>
-              <TableCell sx={{ typography: 'subtitle2' }}>Upload File</TableCell>
+              <TableCell >Upload File</TableCell>
+             
 
-              <TableCell>Qty</TableCell>
+              <TableCell align="center">Qty</TableCell>
 
-              <TableCell align="right">Unit price</TableCell>
+              <TableCell align="center">Unit price</TableCell>
 
-              <TableCell align="right">Total</TableCell>
+              <TableCell align="center">Total</TableCell>
             </TableRow>
           </TableHead>
 
@@ -123,18 +105,14 @@ export default function InvoiceDetails({ invoice }) {
                 <TableCell>
                   <Box sx={{ maxWidth: 560 }}>
                     <Typography variant="subtitle2">{row.title}</Typography>
-
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                      {row.coverUrl}
-                    </Typography>
                   </Box>
                 </TableCell>
+                <TableCell>{renderImages(row.coverUrl)}</TableCell>
+               <TableCell align="center">{row.quantity}</TableCell>
 
-                <TableCell>{row.quantity}</TableCell>
+                <TableCell align="center">{fCurrency(row.price)}</TableCell>
 
-                <TableCell align="right">{fCurrency(row.price)}</TableCell>
-
-                <TableCell align="right">{fCurrency(row.price * row.quantity)}</TableCell>
+                <TableCell align="center">{fCurrency(row.price * row.quantity)}</TableCell>
               </TableRow>
             ))}
 

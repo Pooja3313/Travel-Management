@@ -72,23 +72,6 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
             )}
           </PDFDownloadLink>
 
-          <Tooltip title="Print">
-            <IconButton>
-              <Iconify icon="solar:printer-minimalistic-bold" />
-            </IconButton>
-          </Tooltip>
-
-          <Tooltip title="Send">
-            <IconButton>
-              <Iconify icon="iconamoon:send-fill" />
-            </IconButton>
-          </Tooltip>
-
-          <Tooltip title="Share">
-            <IconButton>
-              <Iconify icon="solar:share-bold" />
-            </IconButton>
-          </Tooltip>
         </Stack>
 
         <TextField

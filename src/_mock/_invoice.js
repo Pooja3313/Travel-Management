@@ -23,7 +23,7 @@ export const coverUr = [...Array(16)].map((_, index) => _mock.image.cover(index)
 
 const ITEMS = [...Array(3)].map((__, index) => {
   const total = INVOICE_SERVICE_OPTIONS[index].price * _mock.number.nativeS(index);
-  const coverUrl = coverUr.slice(index, index + 5);
+  const coverUrl = coverUr.slice(index, index + 1);
   return {
     id: _mock.id(index),
     coverUrl,
