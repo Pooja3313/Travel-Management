@@ -75,7 +75,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
         </Stack>
 
         <TextField
-        disabled
+          disabled
           fullWidth
           select
           label="Status"

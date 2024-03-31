@@ -46,7 +46,9 @@ export default function InvoiceDetails({ invoice }) {
   const handleChangeStatus = useCallback((event) => {
     setCurrentStatus(event.target.value);
   }, []);
-  const renderImages = (coverUrl) => (
+
+
+ const renderImages = (coverUrl) => (
     <Stack spacing={0.5} direction="row" sx={{ p: (theme) => theme.spacing(1, 1, 0, 1) }}>
       <Stack spacing={0.5}>
         <Image alt="Cover Image" src={coverUrl} ratio="1/1" sx={{ borderRadius: 1, width: 80 }} />
@@ -56,17 +58,7 @@ export default function InvoiceDetails({ invoice }) {
   
   const renderTotal = (
     <>
-      {/* <StyledTableRow>
-        <TableCell colSpan={3} />
-        <TableCell sx={{ fontSize: 15, color: 'text.primary' }}>
-          <Box sx={{ mt: 2 }} />
-          Subtotal
-        </TableCell>
-        <TableCell width={120} sx={{ typography: 'subtitle2' }}>
-          <Box sx={{ mt: 2 }} />
-          {fCurrency(invoice.subTotal)}
-        </TableCell>
-      </StyledTableRow> */}
+     
       <StyledTableRow>
         <TableCell colSpan={3} />
         <TableCell sx={{ typography: 'subtitle1' }}>SubTotal</TableCell>

@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-import { Page, View, Text, Image as ImagePdf, Document, Font, StyleSheet } from '@react-pdf/renderer';
-// 
-import Stack from '@mui/material/Stack';
+import { Page, View, Text, Image, Document, Font, StyleSheet } from '@react-pdf/renderer';
+// utils
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 import { _invoices } from 'src/_mock';
-import Image from 'src/components/image';
 
 // ----------------------------------------------------------------------
 
@@ -84,13 +82,7 @@ const useStyles = () =>
       }),
     []
   );
-  const renderImages = (coverUrl) => (
-    <Stack spacing={0.5} direction="row" sx={{ p: (theme) => theme.spacing(1, 1, 0, 1) }}>
-      <Stack spacing={0.5}>
-        <Image alt="Cover Image" src={coverUrl} ratio="1/1" sx={{ borderRadius: 1, width: 80 }} />
-      </Stack>
-    </Stack>
-  );
+
 // ----------------------------------------------------------------------
 
 export default function InvoicePDF({ invoice, currentStatus }) {
@@ -113,7 +105,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={[styles.gridContainer, styles.mb40]}>
-          <ImagePdf source="/logo/logo_single.png" style={{ width: 48, height: 48 }} />
+          <Image source="/logo/logo_single.png" style={{ width: 48, height: 48 }} />
 
           <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
             <Text style={styles.h3}>{currentStatus}</Text>
@@ -176,7 +168,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
                 <Text style={styles.subtitle2}>Upload File</Text>
               </View>
 
-              <View  style={[styles.tableCell_3, styles.alignRight]} >
+              <View style={[styles.tableCell_3, styles.alignRight]}>
                 <Text style={styles.subtitle2}>Qty</Text>
               </View>
 
@@ -201,10 +193,11 @@ export default function InvoicePDF({ invoice, currentStatus }) {
                   <Text style={styles.subtitle2}>{item.title}</Text>
                 </View>
                 <View style={styles.tableCell_3}>
-                  <Text style={styles.subtitle2}>{renderImages(item.coverUrl)}</Text>
+                  {/* Replace text with Image component */}
+                  <Image source={{ uri: item.coverUrl }} style={{ width: 48, height: 48 }} />
                 </View>
 
-                <View  style={[styles.tableCell_3, styles.alignRight]}>
+                <View style={[styles.tableCell_3, styles.alignRight]}>
                   <Text style={styles.subtitle2}>{item.quantity}</Text>
                 </View>
 

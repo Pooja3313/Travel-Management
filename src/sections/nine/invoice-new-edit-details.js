@@ -1,5 +1,5 @@
 import sum from 'lodash/sum';
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 // @mui
 import Box from '@mui/material/Box';
@@ -32,6 +32,7 @@ export default function InvoiceNewEditDetails() {
   });
 
   const values = watch();
+ 
 
   const totalOnRow = values.items.map((item) => item.quantity * item.price);
 
@@ -54,11 +55,21 @@ export default function InvoiceNewEditDetails() {
     });
   };
 
+ 
   const handleRemove = (index) => {
     remove(index);
   };
+
+  const handleRemoveFile = useCallback(
+    (index) => {
+      setValue(`items[${index}].coverUrl`, null, { shouldValidate: true });
+      // Optionally, update the state to remove the image from the UI
+    },
+    [setValue]
+  );
+
   const handleDrop = useCallback(
-    (acceptedFiles) => {
+    (acceptedFiles, index) => {
       const file = acceptedFiles[0];
 
       const newFile = Object.assign(file, {
@@ -66,15 +77,13 @@ export default function InvoiceNewEditDetails() {
       });
 
       if (file) {
-        setValue('coverUrl', newFile, { shouldValidate: true });
+        setValue(`items[${index}].coverUrl`, newFile, { shouldValidate: true });
+        // Update UI to display uploaded image preview
       }
     },
     [setValue]
   );
-
-  const handleRemoveFile = useCallback(() => {
-    setValue('coverUrl', null);
-  }, [setValue]);
+  
 
   const handleClearService = useCallback(
     (index) => {
@@ -151,13 +160,12 @@ export default function InvoiceNewEditDetails() {
                 InputLabelProps={{ shrink: true }}
                 sx={{ maxWidth: { md: 350 } }}
               />
-
               <RHFUpload
-                name="coverUrl"
-                label="File Upload"
-                size="small"
-                onDrop={handleDrop}
-                onDelete={handleRemoveFile}
+                name={`items[${index}].coverUrl`}
+                maxSize={3145728}
+                // size="small"
+                onDrop={(acceptedFiles) => handleDrop(acceptedFiles, index)} // Pass index as an argument
+                onDelete={() => handleRemoveFile(index)} 
                 InputLabelProps={{ shrink: true }}
               />
               <RHFSelect

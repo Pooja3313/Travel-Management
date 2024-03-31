@@ -64,6 +64,7 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
     transportation: Yup.string().required('Transportation Name is required'),
     FoodNeededs: Yup.string().required('Need Food Facility is required'),
     foodOption: Yup.array().min(1,'Choose at least one option'),
+    
     status: Yup.string(),
     isVerified: Yup.boolean(),
   });
@@ -170,15 +171,6 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
                 )}
               />
 
-            {/* <RHFRadioGroup
-              row
-              name="Payment"
-              label="How will you handle trip payment?"
-              spacing={4}
-              options={_pay}
-            /> */}
-
-            {/* {values.Payment === 'company_pay' && ( */}
               <>
                 <RHFTextField name="from" label="From Destination" />
                 <RHFTextField name="to" label="To Destination" />
@@ -216,7 +208,7 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
                 <RHFRadioGroup
                   row
                   name="FoodNeededs"
-                  label="FoodNeeded"
+                  label="foodNeeded"
                   spacing={4}
                   options={_foodNeeded}
                 />

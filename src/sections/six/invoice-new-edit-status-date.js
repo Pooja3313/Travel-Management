@@ -28,7 +28,7 @@ export default function InvoiceNewEditStatusDate() {
 
       <RHFSelect
         fullWidth
-        // disabled
+        disabled
         name="status"
         label="Status"
         InputLabelProps={{ shrink: true }}

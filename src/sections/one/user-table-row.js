@@ -17,31 +17,12 @@ import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 //
-import { _EmpList, _roles,  _accommodation,_transportation, _foodNeeded, _foodOption } from 'src/_mock';
-import UserQuickEditForm from './user-quick-edit-form';
+// import UserQuickEditForm from './user-quick-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }) {
-  const {
-    EmpName,
-    EmpID,
-    roles,
-    department,
-    projectTitle,
-    from,
-    to,
-    startDate,
-    endDate,
-    purpose,
-    accommodation,
-    transportation,
-    FoodNeededs,
-    foodOption,
-    status,
-    avatarUrl,
-  
-  } = row;
+export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
+  const { name, avatarUrl, company, role, status, email, phoneNumber } = row;
 
   const confirm = useBoolean();
 
@@ -57,11 +38,11 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
         </TableCell>
 
         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar alt={EmpName} src={avatarUrl} sx={{ mr: 2 }} />
+          <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} />
 
           <ListItemText
-            primary={EmpID}
-            // secondary={EmpName}
+            primary={name}
+            secondary={email}
             primaryTypographyProps={{ typography: 'body2' }}
             secondaryTypographyProps={{
               component: 'span',
@@ -69,23 +50,12 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
             }}
           />
         </TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{EmpName}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{roles}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{department}</TableCell>
-        {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{Payment}</TableCell> */}
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{phoneNumber}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{projectTitle}</TableCell>
-      
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{from}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{to}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{startDate}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{endDate}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{purpose}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{accommodation}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{transportation}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{FoodNeededs}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{foodOption}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{company}</TableCell>
+
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell>
 
         <TableCell>
           <Label
@@ -114,8 +84,7 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
         </TableCell>
       </TableRow>
 
-      <UserQuickEditForm currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
-
+      
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
@@ -133,7 +102,7 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
           Delete
         </MenuItem>
 
-        {/* <MenuItem
+        <MenuItem
           onClick={() => {
             onEditRow();
             popover.onClose();
@@ -141,7 +110,7 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
         >
           <Iconify icon="solar:pen-bold" />
           Edit
-        </MenuItem> */}
+        </MenuItem>
       </CustomPopover>
 
       <ConfirmDialog
@@ -161,7 +130,7 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
 
 UserTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
-  // onEditRow: PropTypes.func,
+  onEditRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
