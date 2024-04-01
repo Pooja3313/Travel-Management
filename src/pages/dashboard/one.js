@@ -9,7 +9,7 @@ export default function PageOne() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Edit</title>
+        <title> Dashboard</title>
       </Helmet>
 
       <OneView />

@@ -47,11 +47,10 @@ const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
   
-  { id: 'EmpID', label: ' EmpID', width: 50 },
+  { id: 'EmpID', label: ' EmpID', width: 50  },
   { id: 'EmpName', label: 'EmpName', width:50 },
   { id: 'roles', label: 'Roles', width: 50 },
   { id: 'department', label: 'Department', width: 50 }, 
-  // { id: 'Payment', label: 'Payment', width: 50 }, 
   { id: 'projectTitle', label: 'ProjectTitle', width: 50 }, 
   { id: 'from', label: 'From', width: 50 },
   { id: 'to', label: 'To', width: 50 },
@@ -74,7 +73,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function OneView() {
+export default function FourView() {
   const table = useTable();
 
   const settings = useSettingsContext();
@@ -158,22 +157,13 @@ export default function OneView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="List"
+          heading="DashBoard"
           links={[
-            { name: 'Dashboard', href: paths.dashboard.root },
+            { name: 'HOD_Dashboard', href: paths.dashboard.root },
             // { name: 'employee', href: paths.dashboard.group.four },
-            { name: 'TripList' },
+           
           ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.dashboard.group.five}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Trip
-            </Button>
-          }
+        
           sx={{
             mb: { xs: 3, md: 5 },
           }}
@@ -291,7 +281,7 @@ export default function OneView() {
                         selected={table.selected.includes(row.id)}
                         onSelectRow={() => table.onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
-                        // onEditRow={() => handleEditRow(row.id)}
+                        
                       />
                     ))}
 

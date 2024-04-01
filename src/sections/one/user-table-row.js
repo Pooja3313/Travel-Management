@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
+import { useState, useCallback } from 'react';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
@@ -17,18 +20,47 @@ import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 //
+import {
+  _EmpList,
+  USER_STATUS_OPTIONS,
+  _roles,
+  _accommodation,
+  _transportation,
+  _foodNeeded,
+  _foodOption,
+} from 'src/_mock';
 // import UserQuickEditForm from './user-quick-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { name, avatarUrl, company, role, status, email, phoneNumber } = row;
+export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }) {
+  const {
+    EmpName,
+    EmpID,
+    roles,
+    department,
+    projectTitle,
+    from,
+    to,
+    startDate,
+    endDate,
+    purpose,
+    accommodation,
+    transportation,
+    FoodNeededs,
+    foodOption,
+    status,
+    avatarUrl,
+  } = row;
 
   const confirm = useBoolean();
 
-  const quickEdit = useBoolean();
-
   const popover = usePopover();
+  const [currentStatus, setCurrentStatus] = useState(status);
+
+  const handleChangeStatus = useCallback((event) => {
+    setCurrentStatus(event.target.value);
+  }, []);
 
   return (
     <>
@@ -38,11 +70,11 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         </TableCell>
 
         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} />
+          <Avatar alt={EmpName} src={avatarUrl} sx={{ mr: 2 }} />
 
           <ListItemText
-            primary={name}
-            secondary={email}
+            primary={EmpID}
+            // secondary={EmpName}
             primaryTypographyProps={{ typography: 'body2' }}
             secondaryTypographyProps={{
               component: 'span',
@@ -50,41 +82,49 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
             }}
           />
         </TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{EmpName}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{roles}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{phoneNumber}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{department}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{company}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{projectTitle}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{from}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{to}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{startDate}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{endDate}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{purpose}</TableCell>
+        <TableCell   sx={{ whiteSpace: 'nowrap' }}>{accommodation}</TableCell>
+        <TableCell   sx={{ whiteSpace: 'nowrap' }}>{transportation}</TableCell>
+        <TableCell align="center" sx={{ whiteSpace: 'nowrap'}}>{FoodNeededs}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{foodOption}</TableCell>
 
-        <TableCell>
-          <Label
-            variant="soft"
-            color={
-              (status === 'active' && 'success') ||
-              (status === 'pending' && 'warning') ||
-              (status === 'banned' && 'error') ||
-              'default'
-            }
-          >
-            {status}
-          </Label>
+        <TableCell >
+          <FormControl sx={{ minWidth: 120 }}>
+            <Select
+              value={currentStatus}
+              onChange={handleChangeStatus}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Select Status' }}
+            >
+              {USER_STATUS_OPTIONS.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </TableCell>
 
         <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-          <Tooltip title="Quick Edit" placement="top" arrow>
-            <IconButton color={quickEdit.value ? 'inherit' : 'default'} onClick={quickEdit.onTrue}>
-              <Iconify icon="solar:pen-bold" />
-            </IconButton>
-          </Tooltip>
-
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
         </TableCell>
       </TableRow>
 
-      
+      {/* <UserQuickEditForm currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} /> */}
+
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
@@ -102,7 +142,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           Delete
         </MenuItem>
 
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             onEditRow();
             popover.onClose();
@@ -110,7 +150,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         >
           <Iconify icon="solar:pen-bold" />
           Edit
-        </MenuItem>
+        </MenuItem> */}
       </CustomPopover>
 
       <ConfirmDialog
@@ -130,7 +170,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
 
 UserTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
-  onEditRow: PropTypes.func,
+  // onEditRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,

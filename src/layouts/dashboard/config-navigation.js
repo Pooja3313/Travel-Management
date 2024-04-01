@@ -49,11 +49,11 @@ export function useNavData() {
       // OVERVIEW
       // ----------------------------------------------------------------------
       {
-        subheader: 'Hod_DashBoard',
+        subheader: 'DashBoard',
         items: [
-          { title: 'one', path: paths.dashboard.root, icon: ICONS.dashboard },
-          { title: 'two', path: paths.dashboard.two, icon: ICONS.ecommerce },
-          { title: 'three', path: paths.dashboard.three, icon: ICONS.analytics },
+          { title: 'HOD DashBoard', path: paths.dashboard.root, icon: ICONS.dashboard },
+          { title: 'Travel Manager_DashBoard', path: paths.dashboard.two, icon: ICONS.dashboard  },
+          { title: 'three', path: paths.dashboard.three, icon: ICONS.dashboard  },
         ],
       },
 

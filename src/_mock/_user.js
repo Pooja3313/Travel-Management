@@ -178,7 +178,7 @@ export const _EmpList = [...Array(20)].map((_, index) => {
   // const FoodNeededs = (index % 2 === 0 && _foodNeeded[0].label) || _foodNeeded[0].label;
 
   const FoodNeededs =
-  _foodNeeded.map((option) => option.label)[1] || _foodNeeded[0].label;
+  _foodNeeded.map((option) => option.label)[0] || _foodNeeded[1].label;
   return {
     id: _mock.id(index),
     EmpID: _mock.EmpID(index),
