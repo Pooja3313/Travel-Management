@@ -54,8 +54,8 @@ const TABLE_HEAD = [
   { id: 'EmpID', label: 'Emp ID' },
   { id: 'from', label: 'From', width: 50 },
   { id: 'to', label: 'To', width: 50 },
-  { id: 'startDate', label: 'StartDate' },
-  { id: 'EndDate', label: 'endDate' },
+  { id: 'createDate', label: 'StartDate' },
+  { id: 'dueDate', label: 'endDate' },
   { id: 'price', label: 'Amount' },
   // { id: 'sent', label: 'Sent', align: 'center' },
   { id: 'status', label: 'Status' },
@@ -66,8 +66,8 @@ const defaultFilters = {
   name: '',
   service: [],
   status: 'all',
-  startDate: null,
-  endDate: null,
+  createDate: null,
+  dueDate: null,
 };
 
 // ----------------------------------------------------------------------
@@ -79,7 +79,7 @@ export default function SevenView() {
 
   const router = useRouter();
 
-  const table = useTable({ defaultOrderBy: 'startDate' });
+  const table = useTable({ defaultOrderBy: 'createDate' });
 
   const confirm = useBoolean();
 
@@ -88,8 +88,8 @@ export default function SevenView() {
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
-    filters.startDate && filters.endDate
-      ? filters.startDate.getTime() > filters.endDate.getTime()
+    filters.createDate && filters.dueDate
+      ? filters.createDate.getTime() > filters.dueDate.getTime()
       : false;
 
   const dataFiltered = applyFilter({
@@ -110,7 +110,7 @@ export default function SevenView() {
     !!filters.name ||
     !!filters.service.length ||
     filters.status !== 'all' ||
-    (!!filters.startDate && !!filters.endDate);
+    (!!filters.createDate && !!filters.dueDate);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -139,10 +139,10 @@ export default function SevenView() {
       count: getInvoiceLength('pending'),
     },
     {
-      value: 'overdue',
-      label: 'Overdue',
+      value: 'reject',
+      label: 'Reject',
       color: 'error',
-      count: getInvoiceLength('overdue'),
+      count: getInvoiceLength('reject'),
     },
     {
       value: 'draft',
@@ -257,7 +257,7 @@ export default function SevenView() {
                 title="Total"
                 total={tableData.length}
                 percent={100}
-                price={sumBy(tableData, 'totalAmount')}
+                price={sumBy(tableData, 'subTotal')}
                 icon="solar:bill-list-bold-duotone"
                 color={theme.palette.info.main}
               />
@@ -281,10 +281,10 @@ export default function SevenView() {
               />
 
               <InvoiceAnalytic
-                title="Overdue"
-                total={getInvoiceLength('overdue')}
-                percent={getPercentByStatus('overdue')}
-                price={getTotalAmount('overdue')}
+                title="Reject"
+                total={getInvoiceLength('reject')}
+                percent={getPercentByStatus('reject')}
+                price={getTotalAmount('reject')}
                 icon="solar:bell-bing-bold-duotone"
                 color={theme.palette.error.main}
               />
@@ -333,7 +333,6 @@ export default function SevenView() {
           <InvoiceTableToolbar
             filters={filters}
             onFilters={handleFilters}
-            //
             dateError={dateError}
             serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option.name)}
           />
@@ -342,9 +341,7 @@ export default function SevenView() {
             <InvoiceTableFiltersResult
               filters={filters}
               onFilters={handleFilters}
-              //
               onResetFilters={handleResetFilters}
-              //
               results={dataFiltered.length}
               sx={{ p: 2.5, pt: 0 }}
             />
@@ -478,7 +475,7 @@ export default function SevenView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, service, startDate, endDate } = filters;
+  const { name, status, service, createDate, dueDate } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -509,11 +506,11 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   }
 
   if (!dateError) {
-    if (startDate && endDate) {
+    if (createDate && dueDate) {
       inputData = inputData.filter(
         (invoice) =>
-          fTimestamp(invoice.startDateDate) >= fTimestamp(startDate) &&
-          fTimestamp(invoice.endDate) <= fTimestamp(endDate)
+          fTimestamp(invoice.createDate) >= fTimestamp(createDate) &&
+          fTimestamp(invoice.dueDate) <= fTimestamp(dueDate)
       );
     }
   }

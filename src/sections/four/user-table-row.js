@@ -17,16 +17,16 @@ import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 //
-import { _EmpList, _roles,  _accommodation,_transportation, _foodNeeded, _foodOption } from 'src/_mock';
+import { _EmpList, _role,  _accommodation,_transportation, _foodNeeded, _foodOption } from 'src/_mock';
 import UserQuickEditForm from './user-quick-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }) {
+export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow, onSixRow }) {
   const {
     EmpName,
     EmpID,
-    roles,
+    role,
     department,
     projectTitle,
     from,
@@ -42,7 +42,7 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
     avatarUrl,
   
   } = row;
-
+  
   const confirm = useBoolean();
 
   const quickEdit = useBoolean();
@@ -70,7 +70,7 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
           />
         </TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{EmpName}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{roles}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{department}</TableCell>
         {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{Payment}</TableCell> */}
@@ -91,9 +91,9 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
           <Label
             variant="soft"
             color={
-              (status === 'active' && 'success') ||
+              (status === 'approve' && 'success') ||
               (status === 'pending' && 'warning') ||
-              (status === 'banned' && 'error') ||
+              (status === 'reject' && 'error') ||
               'default'
             }
           >
@@ -133,15 +133,15 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
           Delete
         </MenuItem>
 
-        {/* <MenuItem
+        <MenuItem
           onClick={() => {
-            onEditRow();
+            onSixRow();
             popover.onClose();
           }}
         >
           <Iconify icon="solar:pen-bold" />
-          Edit
-        </MenuItem> */}
+        Reimbursement Form
+        </MenuItem>
       </CustomPopover>
 
       <ConfirmDialog
@@ -161,7 +161,7 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
 
 UserTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
-  // onEditRow: PropTypes.func,
+  onSixRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,

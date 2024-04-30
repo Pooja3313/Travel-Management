@@ -1,63 +1,48 @@
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
 // @mui
-import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
+import Link from '@mui/material/Link';
+import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
+import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
-import { useState, useCallback } from 'react';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useState, useCallback } from 'react';
+// utils
+import { fCurrency } from 'src/utils/format-number';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-//
-import {
-  _EmpList,
-  USER_STATUS_OPTIONS,
-  _role,
-  _accommodation,
-  _transportation,
-  _foodNeeded,
-  _foodOption,
-} from 'src/_mock';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { INVOICES_STATUS_OPTIONS } from 'src/_mock';
+
 
 
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }) {
-  const {
-    EmpName,
-    EmpID,
-    role,
-    department,
-    projectTitle,
-    from,
-    to,
-    startDate,
-    endDate,
-    purpose,
-    accommodation,
-    transportation,
-    FoodNeededs,
-    foodOption,
-    status,
-    avatarUrl,
-  } = row;
+export default function InvoiceTableRow({
+  row,
+  selected,
+  onSelectRow,
+  onViewRow,
+  onDeleteRow,
+}) {
+  const { invoiceNumber,EmpID, from, to, startDate, endDate, Status, invoiceTo, subTotal } = row;
 
   const confirm = useBoolean();
 
   const popover = usePopover();
-  const [currentStatus, setCurrentStatus] = useState(status);
-
+  const [currentStatus, setCurrentStatus] = useState(Status);
   const handleChangeStatus = useCallback((event) => {
     setCurrentStatus(event.target.value);
   }, []);
@@ -70,34 +55,37 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
         </TableCell>
 
         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar alt={EmpName} src={avatarUrl} sx={{ mr: 2 }} />
+          <Avatar alt={invoiceTo.name} sx={{ mr: 2 }}>
+            {invoiceTo.name.charAt(0).toUpperCase()}
+          </Avatar>
 
           <ListItemText
-            primary={EmpID}
-            // secondary={EmpName}
-            primaryTypographyProps={{ typography: 'body2' }}
-            secondaryTypographyProps={{
-              component: 'span',
-              color: 'text.disabled',
-            }}
+            disableTypography
+            primary={
+              <Typography variant="body2" noWrap>
+                {invoiceTo.name}
+              </Typography>
+            }
+            secondary={
+              <Link
+                noWrap
+                variant="body2"
+                onClick={onViewRow}
+                sx={{ color: 'text.disabled', cursor: 'pointer' }}
+              >
+                {invoiceNumber}
+              </Link>
+            }
           />
         </TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{EmpName}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell>
+        <TableCell>{EmpID}</TableCell>
+        <TableCell>{from}</TableCell>
+        <TableCell>{to}</TableCell>
+        <TableCell>{startDate}</TableCell>
+        <TableCell>{endDate}</TableCell>
+        <TableCell>{fCurrency(subTotal)}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{department}</TableCell>
-
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{projectTitle}</TableCell>
-
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{from}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{to}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{startDate}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{endDate}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{purpose}</TableCell>
-        <TableCell   sx={{ whiteSpace: 'nowrap' }}>{accommodation}</TableCell>
-        <TableCell   sx={{ whiteSpace: 'nowrap' }}>{transportation}</TableCell>
-        <TableCell align="center" sx={{ whiteSpace: 'nowrap'}}>{FoodNeededs}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{foodOption}</TableCell>
+      
 
         <TableCell >
           <FormControl sx={{ minWidth: 120 }}>
@@ -107,7 +95,7 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
               displayEmpty
               inputProps={{ 'aria-label': 'Select Status' }}
             >
-              {USER_STATUS_OPTIONS.map((option) => (
+              {INVOICES_STATUS_OPTIONS.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
@@ -116,7 +104,8 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
           </FormControl>
         </TableCell>
 
-        <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+
+        <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
@@ -127,8 +116,20 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        sx={{ width: 140 }}
+        sx={{ width: 160 }}
       >
+        <MenuItem
+          onClick={() => {
+            onViewRow();
+            popover.onClose();
+          }}
+        >
+          <Iconify icon="solar:eye-bold" />
+          View
+        </MenuItem>
+
+        <Divider sx={{ borderStyle: 'dashed' }} />
+
         <MenuItem
           onClick={() => {
             confirm.onTrue();
@@ -156,10 +157,11 @@ export default function UserTableRow({ row, selected, onSelectRow, onDeleteRow }
   );
 }
 
-UserTableRow.propTypes = {
+InvoiceTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
   // onEditRow: PropTypes.func,
   onSelectRow: PropTypes.func,
+  onViewRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
 };

@@ -1,5 +1,5 @@
 import sum from 'lodash/sum';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 // @mui
 import Box from '@mui/material/Box';
@@ -11,38 +11,37 @@ import Typography from '@mui/material/Typography';
 import { inputBaseClasses } from '@mui/material/InputBase';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
-
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
 // utils
 import { fCurrency } from 'src/utils/format-number';
 // _mock
-import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
+import { INVOICE_SERVICE_OPTIONS, coverUrl } from 'src/_mock';
 
 // components
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField, RHFUpload } from 'src/components/hook-form';
+import { Upload } from 'src/components/upload';
 
 // ----------------------------------------------------------------------
 
+
+
+
 export default function InvoiceNewEditDetails() {
-  const { control, setValue, watch, resetField } = useFormContext();
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'items',
-  });
-
+  const { control, setValue, resetField, getValues, watch } = useFormContext();
+  const [files, setFiles] = useState([]);
   const values = watch();
- 
 
   const totalOnRow = values.items.map((item) => item.quantity * item.price);
 
   const subTotal = sum(totalOnRow);
 
-  const totalAmount = subTotal - values.discount - values.shipping + values.taxes;
-
-  useEffect(() => {
-    setValue('totalAmount', totalAmount);
-  }, [setValue, totalAmount]);
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'items',
+  });
 
   const handleAdd = () => {
     append({
@@ -55,7 +54,6 @@ export default function InvoiceNewEditDetails() {
     });
   };
 
- 
   const handleRemove = (index) => {
     remove(index);
   };
@@ -72,19 +70,71 @@ export default function InvoiceNewEditDetails() {
     (acceptedFiles, index) => {
       const file = acceptedFiles[0];
 
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
+      // Check if a file is present
       if (file) {
-        setValue(`items[${index}].coverUrl`, newFile, { shouldValidate: true });
-        // Update UI to display uploaded image preview
+        try {
+          const newFile = Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          });
+
+          setValue(`items[${index}].coverUrl`, newFile, { shouldValidate: true });
+          // Update UI to display uploaded image preview
+        } catch (error) {
+          console.error('Error creating object URL:', error);
+        }
       }
     },
     [setValue]
   );
+  const handleDropMultiFile = useCallback(
+    (acceptedFiles) => {
+      const selectedFile = acceptedFiles[0]; // Select the first file only
+      if (selectedFile) {
+        try {
+          const newFile = Object.assign(selectedFile, {
+            preview: URL.createObjectURL(selectedFile),
+          });
+          setFiles([newFile]); // Set the state with the single selected file
+        } catch (error) {
+          console.error('Error creating object URL:', error);
+        }
+      }
+    },
+    [] // No dependencies needed for this function
+  );
+  const handleRemoveFiles = (inputFile) => {
+    const filesFiltered = files.filter((fileFiltered) => fileFiltered !== inputFile);
+    setFiles(filesFiltered);
+  };
   
 
+  
+  // const handleRemoveFiles = useCallback(() => {
+  //   setValue('coverUrl', null, { shouldValidate: true });
+  //   // Optionally, update the state to remove the image from the UI
+  // }, [setValue]);
+  
+  // const handleDrops = useCallback(
+  //   (acceptedFiles) => {
+  //     const file = acceptedFiles[0];
+  
+  //     // Check if a file is present
+  //     if (file) {
+  //       try {
+  //         const newFile = Object.assign(file, {
+  //           preview: URL.createObjectURL(file),
+  //         });
+  
+  //         setValue('coverUrl', newFile, { shouldValidate: true });
+  //         // Update UI to display uploaded image preview
+  //       } catch (error) {
+  //         console.error('Error creating object URL:', error);
+  //       }
+  //     }
+  //   },
+  //   [setValue]
+  // );
+  
   const handleClearService = useCallback(
     (index) => {
       resetField(`items[${index}].quantity`);
@@ -94,19 +144,19 @@ export default function InvoiceNewEditDetails() {
     [resetField]
   );
 
-  const handleSelectService = useCallback(
-    (index, option) => {
-      setValue(
-        `items[${index}].price`,
-        INVOICE_SERVICE_OPTIONS.find((service) => service.name === option)?.price
-      );
-      setValue(
-        `items[${index}].total`,
-        values.items.map((item) => item.quantity * item.price)[index]
-      );
-    },
-    [setValue, values.items]
-  );
+  // const handleSelectService = useCallback(
+  //   (index, option) => {
+  //     setValue(
+  //       `items[${index}].price`,
+  //       INVOICE_SERVICE_OPTIONS.find((service) => service.name === option)?.price
+  //     );
+  //     setValue(
+  //       `items[${index}].total`,
+  //       values.items.map((item) => item.quantity * item.price)[index]
+  //     );
+  //   },
+  //   [setValue, values.items]
+  // );
 
   const handleChangeQuantity = useCallback(
     (event, index) => {
@@ -130,6 +180,18 @@ export default function InvoiceNewEditDetails() {
     [setValue, values.items]
   );
 
+  const handleSelectService = useCallback(
+    (index, option) => {
+      const selectedService = INVOICE_SERVICE_OPTIONS.find((service) => service.name === option);
+      if (selectedService) {
+        // Update the service name only if a valid service is selected
+        setValue(`items[${index}].service`, selectedService.name);
+      }
+      // No changes to price and total
+    },
+    [setValue]
+  );
+
   const renderTotal = (
     <Stack
       spacing={2}
@@ -138,7 +200,7 @@ export default function InvoiceNewEditDetails() {
     >
       <Stack direction="row">
         <Box sx={{ color: 'text.secondary' }}>Subtotal</Box>
-        <Box sx={{ width: 160, typography: 'subtitle2' }}>{fCurrency(subTotal) || '-'}</Box>
+        <Box sx={{ width: 160, typography: 'subtitle2' }}>&#8377;{fCurrency(subTotal) || '-'}</Box>
       </Stack>
     </Stack>
   );
@@ -165,7 +227,7 @@ export default function InvoiceNewEditDetails() {
                 maxSize={3145728}
                 // size="small"
                 onDrop={(acceptedFiles) => handleDrop(acceptedFiles, index)} // Pass index as an argument
-                onDelete={() => handleRemoveFile(index)} 
+                onDelete={() => handleRemoveFile(index)}
                 InputLabelProps={{ shrink: true }}
               />
               <RHFSelect
@@ -218,7 +280,7 @@ export default function InvoiceNewEditDetails() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Box sx={{ typography: 'subtitle2', color: 'text.disabled' }}>$</Box>
+                      <Box sx={{ typography: 'subtitle2', color: 'text.disabled' }}>&#8377;</Box>
                     </InputAdornment>
                   ),
                 }}
@@ -237,7 +299,7 @@ export default function InvoiceNewEditDetails() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Box sx={{ typography: 'subtitle2', color: 'text.disabled' }}>$</Box>
+                      <Box sx={{ typography: 'subtitle2', color: 'text.disabled' }}>&#8377;</Box>
                     </InputAdornment>
                   ),
                 }}
@@ -279,6 +341,32 @@ export default function InvoiceNewEditDetails() {
           Add Item
         </Button>
       </Stack>
+      <h4>Report</h4>
+
+      {/* <RHFUpload
+        name="coverUrl"
+        maxSize={3145728}
+        // size="small"
+        onDrop={(acceptedFiles) => handleDrops(acceptedFiles)} // Pass index as an argument
+        onDelete={() => handleRemoveFiles()} // Pass index as an argument
+        InputLabelProps={{ shrink: true }}
+      /> */}
+        <Card>
+        <CardHeader
+          title="Upload Report"
+        />
+        <CardContent>
+          <Upload
+            multiple
+            name="UploadFile"
+            files={files}
+            onDrop={handleDropMultiFile}
+            onRemove={handleRemoveFiles}
+           
+            // onUpload={() => console.info('ON UPLOAD')}
+          />
+        </CardContent>
+      </Card>
 
       {renderTotal}
     </Box>

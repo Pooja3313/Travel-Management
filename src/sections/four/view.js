@@ -17,7 +17,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 // _mock
-import { _EmpList,_roles ,USER_STATUS_OPTIONS } from 'src/_mock';
+import { _EmpList,_role ,USER_STATUS_OPTIONS } from 'src/_mock';
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
 import Label from 'src/components/label';
@@ -49,9 +49,8 @@ const TABLE_HEAD = [
   
   { id: 'EmpID', label: ' EmpID', width: 50 },
   { id: 'EmpName', label: 'EmpName', width:50 },
-  { id: 'roles', label: 'Roles', width: 50 },
+  { id: 'role', label: 'Roles', width: 50 },
   { id: 'department', label: 'Department', width: 50 }, 
-  // { id: 'Payment', label: 'Payment', width: 50 }, 
   { id: 'projectTitle', label: 'ProjectTitle', width: 50 }, 
   { id: 'from', label: 'From', width: 50 },
   { id: 'to', label: 'To', width: 50 },
@@ -68,7 +67,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   EmpName: '',
-  roles: [],
+  role: [],
   status: 'all',
 };
 
@@ -136,13 +135,13 @@ export default function FourView() {
     });
   }, [dataFiltered.length, dataInPage.length, table, tableData]);
 
-  // const handleEditRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.group.six(id));
-  //   },
-  //   [router]
-  // );
-
+  
+  const SixView = useCallback(
+    (id) => {
+      router.push(paths.dashboard.users.six(id));
+    },
+    [router]
+  );
   const handleFilterStatus = useCallback(
     (event, newValue) => {
       handleFilters('status', newValue);
@@ -160,9 +159,11 @@ export default function FourView() {
         <CustomBreadcrumbs
           heading="List"
           links={[
-            { name: 'Dashboard', href: paths.dashboard.root },
-            // { name: 'employee', href: paths.dashboard.group.four },
-            { name: 'TripList' },
+          { name: 'Dashboard', href: paths.dashboard.group.root },
+           { name: 'TripList', href: paths.dashboard.group.five},
+           { name: 'List'},
+          
+            
           ]}
           action={
             <Button
@@ -200,22 +201,20 @@ export default function FourView() {
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
                     color={
-                      (tab.value === 'active' && 'success') ||
+                      (tab.value === 'approve' && 'success') ||
                       (tab.value === 'pending' && 'warning') ||
-                      (tab.value === 'banned' && 'error') ||
+                      (tab.value === 'reject' && 'error') ||
                       'default'
                     }
                   >
                     {tab.value === 'all' && _EmpList.length}
-                    {tab.value === 'active' &&
-                      _EmpList.filter((user) => user.status === 'active').length}
-
+                    
                     {tab.value === 'pending' &&
                       _EmpList.filter((user) => user.status === 'pending').length}
-                    {tab.value === 'banned' &&
-                      _EmpList.filter((user) => user.status === 'banned').length}
-                    {tab.value === 'rejected' &&
-                      _EmpList.filter((user) => user.status === 'rejected').length}
+                    {tab.value === 'approve' &&
+                      _EmpList.filter((user) => user.status === 'approve').length}
+                    {tab.value === 'reject' &&
+                      _EmpList.filter((user) => user.status === 'reject').length}
                   </Label>
                 }
               />
@@ -226,7 +225,7 @@ export default function FourView() {
             filters={filters}
             onFilters={handleFilters}
             //
-            roleOptions={_roles}
+            roleOptions={_role}
           />
 
           {canReset && (
@@ -291,7 +290,7 @@ export default function FourView() {
                         selected={table.selected.includes(row.id)}
                         onSelectRow={() => table.onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
-                        // onEditRow={() => handleEditRow(row.id)}
+                        onSixRow={() => SixView(row.id)}
                       />
                     ))}
 
@@ -348,7 +347,7 @@ export default function FourView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters }) {
-  const { EmpName, status, roles } = filters;
+  const { EmpName, status, role } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -370,8 +369,8 @@ function applyFilter({ inputData, comparator, filters }) {
     inputData = inputData.filter((user) => user.status === status);
   }
 
-  if (roles.length) {
-    inputData = inputData.filter((user) => roles.includes(user.roles));
+  if (role.length) {
+    inputData = inputData.filter((user) => role.includes(user.role));
   }
 
   return inputData;

@@ -53,7 +53,7 @@ export function useNavData() {
         items: [
           { title: 'HOD DashBoard', path: paths.dashboard.root, icon: ICONS.dashboard },
           { title: 'Travel Manager_DashBoard', path: paths.dashboard.two, icon: ICONS.dashboard  },
-          { title: 'three', path: paths.dashboard.three, icon: ICONS.dashboard  },
+          
         ],
       },
 
@@ -62,6 +62,8 @@ export function useNavData() {
       {
         subheader: 'Employee',
         items: [
+          // { title: 'Emp Register', path: paths.dashboard.three, icon: ICONS.user  },
+          // { title: 'Emp Login', path: paths.dashboard.zero, icon: ICONS.user },
           {
             title: 'Travel',
             path: paths.dashboard.group.root,
@@ -78,7 +80,7 @@ export function useNavData() {
             icon: ICONS.user,
             children: [
               { title: 'Emp_Dashboard', path: paths.dashboard.users.root, icon: ICONS.dashboard },
-              { title: 'Reimbursement Form', path: paths.dashboard.users.six,icon: ICONS.invoice},
+              { title: 'Reimbursement Form', path: paths.dashboard.users.demo.six,icon: ICONS.invoice},
               { title: 'Details', path: paths.dashboard.users.demo.eight},
               { title: 'Edit', path: paths.dashboard.users.demo.nine },
             ],

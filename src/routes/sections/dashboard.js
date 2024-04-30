@@ -7,6 +7,7 @@ import DashboardLayout from 'src/layouts/dashboard';
 // components
 import { LoadingScreen } from 'src/components/loading-screen';
 
+
 // ----------------------------------------------------------------------
 
 // USER
@@ -22,7 +23,9 @@ const IndexPage = lazy(() => import('src/pages/dashboard/one'));
 const PageTwo = lazy(() => import('src/pages/dashboard/two'));
 
 
-const PageThree = lazy(() => import('src/pages/dashboard/three'));
+
+// const PageZero = lazy(() => import('src/pages/dashboard/zero'));
+// const PageThree = lazy(() => import('src/pages/dashboard/three'));
 const PageFour = lazy(() => import('src/pages/dashboard/four'));
 const PageFive = lazy(() => import('src/pages/dashboard/five'));
 const PageSix = lazy(() => import('src/pages/dashboard/six'));
@@ -46,7 +49,8 @@ export const dashboardRoutes = [
     children: [
       { element: <IndexPage />, index: true },
       { path: 'two', element: <PageTwo /> },
-      { path: 'three', element: <PageThree /> },
+      // { path: 'three', element: <PageThree /> },
+      // { path: 'zero', element: <PageZero /> },
 
       {
         path: 'group',
@@ -59,7 +63,7 @@ export const dashboardRoutes = [
         path: 'users',
         children: [
           { element: <PageSeven />, index: true },
-          { path: 'six', element: <PageSix /> },
+          { path: ':id/six', element: <PageSix /> },
           { path: ':id', element: <PageEight /> },
           { path: ':id/nine', element: <PageNine /> },
         ],

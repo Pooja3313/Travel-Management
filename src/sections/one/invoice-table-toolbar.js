@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 // @mui
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
@@ -8,8 +9,8 @@ import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
 // components
 import Iconify from 'src/components/iconify';
@@ -17,30 +18,45 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableToolbar({
+export default function InvoiceTableToolbar({
   filters,
   onFilters,
   //
-  roleOptions,
+  dateError,
+  serviceOptions,
 }) {
   const popover = usePopover();
 
   const handleFilterName = useCallback(
     (event) => {
-      onFilters('EmpName', event.target.value);
+      onFilters('name', event.target.value);
     },
     [onFilters]
   );
 
-  const handleFilterRole = useCallback(
+  const handleFilterService = useCallback(
     (event) => {
       onFilters(
-        'role',
+        'service',
         typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
       );
     },
     [onFilters]
   );
+
+  // const handleFilterStartDate = useCallback(
+  //   (newValue) => {
+  //     onFilters('startDate', newValue);
+  //   },
+  //   [onFilters]
+  // );
+
+  // const handleFilterEndDate = useCallback(
+  //   (newValue) => {
+  //     onFilters('endDate', newValue);
+  //   },
+  //   [onFilters]
+  // );
 
   return (
     <>
@@ -59,38 +75,59 @@ export default function UserTableToolbar({
         <FormControl
           sx={{
             flexShrink: 0,
-            width: { xs: 1, md: 200 },
+            width: { xs: 1, md: 180 },
           }}
         >
-          <InputLabel>Role</InputLabel>
+          <InputLabel>Roles</InputLabel>
 
           <Select
             multiple
-            value={filters.role}
-            onChange={handleFilterRole}
-            input={<OutlinedInput label="Roles" />}
+            value={filters.service}
+            onChange={handleFilterService}
+            input={<OutlinedInput label="Service" />}
             renderValue={(selected) => selected.map((value) => value).join(', ')}
-            MenuProps={{
-              PaperProps: {
-                sx: { maxHeight: 240 },
-              },
-            }}
+            sx={{ textTransform: 'capitalize' }}
           >
-            {roleOptions.map((option) => (
+            {serviceOptions.map((option) => (
               <MenuItem key={option} value={option}>
-                <Checkbox disableRipple size="small" checked={filters.role.includes(option)} />
+                <Checkbox disableRipple size="small" checked={filters.service.includes(option)} />
                 {option}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
 
+        {/* <DatePicker
+          label="Start date"
+          value={filters.startDate}
+          onChange={handleFilterStartDate}
+          slotProps={{ textField: { fullWidth: true } }}
+          sx={{
+            maxWidth: { md: 180 },
+          }}
+        /> */}
+
+        {/* <DatePicker
+          label="End date"
+          value={filters.endDate}
+          onChange={handleFilterEndDate}
+          slotProps={{
+            textField: {
+              fullWidth: true,
+              error: dateError,
+            },
+          }}
+          sx={{
+            maxWidth: { md: 180 },
+          }}
+        /> */}
+
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Search..."
+            placeholder="Search customer or invoice number..."
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -143,8 +180,9 @@ export default function UserTableToolbar({
   );
 }
 
-UserTableToolbar.propTypes = {
+InvoiceTableToolbar.propTypes = {
+  dateError: PropTypes.bool,
   filters: PropTypes.object,
   onFilters: PropTypes.func,
-  roleOptions: PropTypes.array,
+  serviceOptions: PropTypes.array,
 };

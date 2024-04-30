@@ -11,10 +11,15 @@ import { _mock } from './_mock';
 export const _foodOption = ['Breakfast', 'Lunch', 'Dinner', 'Tea Break'];
 
 export const USER_STATUS_OPTIONS = [
-  { value: 'active', label: 'Active' },
+  { value: 'approve', label: 'Approve' },
   { value: 'pending', label: 'Pending' },
-  { value: 'banned', label: 'Banned' },
-  { value: 'rejected', label: 'Rejected' },
+  { value: 'reject', label: 'Reject' },
+
+];
+export const STATUS_OPTIONS = [
+  { value: 'approve', label: 'Approve' },
+  
+
 ];
 // export const _pay = [
 //   { value: 'reimbursed', label: 'I will pay for the trip and get reimbursed later' },
@@ -174,8 +179,6 @@ export const _userList = [...Array(20)].map((_, index) => ({
     (index % 2 && 'pending') || (index % 3 && 'banned') || (index % 4 && 'rejected') || 'active',
 }));
 export const _EmpList = [...Array(20)].map((_, index) => {
-  
-  // const FoodNeededs = (index % 2 === 0 && _foodNeeded[0].label) || _foodNeeded[0].label;
 
   const FoodNeededs =
   _foodNeeded.map((option) => option.label)[0] || _foodNeeded[1].label;
@@ -183,11 +186,9 @@ export const _EmpList = [...Array(20)].map((_, index) => {
     id: _mock.id(index),
     EmpID: _mock.EmpID(index),
     EmpName: _mock.fullName(index),
-    roles: _mock.roles(index),
+    role: _mock.role(index),
     department: _mock.department(index),
     projectTitle: _mock.projectTitle(index),
-    // payment:_mock.payment(index),
-    // Payment,
     FoodNeededs,
     foodOption: _foodOption.slice(0, 3),
     from: _mock.from(index),
@@ -199,7 +200,8 @@ export const _EmpList = [...Array(20)].map((_, index) => {
     transportation: _mock.transportation(index),
     avatarUrl: _mock.image.avatar(index),
     isVerified: _mock.boolean(index),
+    STATUS_OPTIONS,
     status:
-      (index % 2 && 'pending') || (index % 3 && 'banned') || (index % 4 && 'rejected') || 'active',
+      (index % 2 && 'pending') || (index % 3 && 'approve') || (index % 4 && 'reject')|| 'reject',
   };
 });

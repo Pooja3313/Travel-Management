@@ -40,6 +40,7 @@ import {
   _purpose,
   _accommodation,
   _transportation,
+  _UploadFile,
   
  
 
@@ -92,6 +93,7 @@ export const _mock = {
 
 
    // New fields
+   UploadFile:(index) => _UploadFile[index],
    EmpID: (index) => _EmpID[index],
    EmpName: (index) => _EmpName[index],
    roles: (index) => _roles[index],

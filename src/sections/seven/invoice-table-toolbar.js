@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 // @mui
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
@@ -44,19 +44,6 @@ export default function InvoiceTableToolbar({
     [onFilters]
   );
 
-  // const handleFilterStartDate = useCallback(
-  //   (newValue) => {
-  //     onFilters('startDate', newValue);
-  //   },
-  //   [onFilters]
-  // );
-
-  // const handleFilterEndDate = useCallback(
-  //   (newValue) => {
-  //     onFilters('endDate', newValue);
-  //   },
-  //   [onFilters]
-  // );
 
   return (
     <>
@@ -97,30 +84,8 @@ export default function InvoiceTableToolbar({
           </Select>
         </FormControl>
 
-        {/* <DatePicker
-          label="Start date"
-          value={filters.startDate}
-          onChange={handleFilterStartDate}
-          slotProps={{ textField: { fullWidth: true } }}
-          sx={{
-            maxWidth: { md: 180 },
-          }}
-        /> */}
+       
 
-        {/* <DatePicker
-          label="End date"
-          value={filters.endDate}
-          onChange={handleFilterEndDate}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              error: dateError,
-            },
-          }}
-          sx={{
-            maxWidth: { md: 180 },
-          }}
-        /> */}
 
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField

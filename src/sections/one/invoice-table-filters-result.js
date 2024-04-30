@@ -14,11 +14,13 @@ import { shortDateLabel } from 'src/components/custom-date-range-picker';
 export default function InvoiceTableFiltersResult({
   filters,
   onFilters,
+  //
   onResetFilters,
+  //
   results,
   ...other
 }) {
-  const shortLabel = shortDateLabel(filters.createDate, filters.dueDate);
+  const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
   const handleRemoveService = (inputValue) => {
     const newValue = filters.service.filter((item) => item !== inputValue);
@@ -26,12 +28,12 @@ export default function InvoiceTableFiltersResult({
   };
 
   const handleRemoveStatus = () => {
-    onFilters('status', 'all');
+    onFilters('Status', 'all');
   };
 
   const handleRemoveDate = () => {
-    onFilters('createDate', null);
-    onFilters('dueDate', null);
+    onFilters('startDate', null);
+    onFilters('endDate', null);
   };
 
   return (
@@ -57,13 +59,13 @@ export default function InvoiceTableFiltersResult({
           </Block>
         )}
 
-        {filters.status !== 'all' && (
+        {filters.Status !== 'all' && (
           <Block label="Status:">
-            <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
+            <Chip size="small" label={filters.Status} onDelete={handleRemoveStatus} />
           </Block>
         )}
 
-        {filters.createDate && filters.dueDate && (
+        {filters.startDate && filters.endDate && (
           <Block label="Date:">
             <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />
           </Block>

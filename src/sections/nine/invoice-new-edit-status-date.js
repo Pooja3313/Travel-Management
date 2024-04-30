@@ -46,17 +46,16 @@ export default function InvoiceNewEditStatusDate() {
       <RHFTextField name="from" label="From Destination" />
       <RHFTextField name="to" label="To Destination" />
 
-      <RHFTextField name="startDate" label="Start Date" />
-      <RHFTextField name="endDate" label="End Date" />
+     
 
     
 
-      {/* <Controller
+      <Controller
         name="createDate"
         control={control}
         render={({ field, fieldState: { error } }) => (
           <DatePicker
-            label="Date create"
+            label="Start Date"
             value={field.value}
             onChange={(newValue) => {
               field.onChange(newValue);
@@ -70,14 +69,14 @@ export default function InvoiceNewEditStatusDate() {
             }}
           />
         )}
-      /> */}
+      />
 
-      {/* <Controller
+      <Controller
         name="dueDate"
         control={control}
         render={({ field, fieldState: { error } }) => (
           <DatePicker
-            label="Due date"
+            label="End Date"
             value={field.value}
             onChange={(newValue) => {
               field.onChange(newValue);
@@ -91,7 +90,7 @@ export default function InvoiceNewEditStatusDate() {
             }}
           />
         )}
-      /> */}
+      />
     </Stack>
   );
 }

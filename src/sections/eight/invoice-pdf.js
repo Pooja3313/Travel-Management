@@ -85,7 +85,7 @@ const useStyles = () =>
 
 // ----------------------------------------------------------------------
 
-export default function InvoicePDF({ invoice, currentStatus }) {
+export default function InvoicePDF({ invoice, currentStatus}) {
   const {
     items,
     EmpID,
@@ -97,6 +97,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
     invoiceFrom,
     invoiceNumber,
     subTotal,
+    UploadFile
   } = invoice;
 
   const styles = useStyles();
@@ -193,7 +194,6 @@ export default function InvoicePDF({ invoice, currentStatus }) {
                   <Text style={styles.subtitle2}>{item.title}</Text>
                 </View>
                 <View style={styles.tableCell_3}>
-                  {/* Replace text with Image component */}
                   <Image source={{ uri: item.coverUrl }} style={{ width: 48, height: 48 }} />
                 </View>
 
@@ -210,19 +210,23 @@ export default function InvoicePDF({ invoice, currentStatus }) {
                 </View>
               </View>
             ))}
+            {/* <View style={styles.tableCell_2}>
+                <Text style={styles.subtitle2}>Report File</Text>
+              </View>
 
-            {/* <View style={[styles.tableRow, styles.noBorder]}>
-              <View style={styles.tableCell_1} />
-              <View style={styles.tableCell_2} />
-              <View style={styles.tableCell_3} />
+              <View style={[styles.tableCell_3, styles.alignLeft]}>
+                <Text style={styles.h4}>{UploadFile}</Text>
+              </View> */}
+              <View style={[styles.tableRow, styles.noBorder]}>
+              
               <View style={styles.tableCell_3}>
-                <Text>Subtotal</Text>
+                <Text style={styles.h4}>Trip Report :</Text>
               </View>
               <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(subTotal)}</Text>
+                <Text style={styles.h4}>{UploadFile}</Text>
               </View>
-              
-            </View> */}
+            </View>
+
             <View style={[styles.tableRow, styles.noBorder]}>
               <View style={styles.tableCell_1} />
               <View style={styles.tableCell_2} />
@@ -244,4 +248,5 @@ export default function InvoicePDF({ invoice, currentStatus }) {
 InvoicePDF.propTypes = {
   currentStatus: PropTypes.string,
   invoice: PropTypes.object,
+  
 };

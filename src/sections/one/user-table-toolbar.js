@@ -35,7 +35,7 @@ export default function UserTableToolbar({
   const handleFilterRole = useCallback(
     (event) => {
       onFilters(
-        'roles',
+        'role',
         typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
       );
     },
@@ -66,7 +66,7 @@ export default function UserTableToolbar({
 
           <Select
             multiple
-            value={filters.roles}
+            value={filters.role}
             onChange={handleFilterRole}
             input={<OutlinedInput label="Roles" />}
             renderValue={(selected) => selected.map((value) => value).join(', ')}
@@ -78,7 +78,7 @@ export default function UserTableToolbar({
           >
             {roleOptions.map((option) => (
               <MenuItem key={option} value={option}>
-                <Checkbox disableRipple size="small" checked={filters.roles.includes(option)} />
+                <Checkbox disableRipple size="small" checked={filters.role.includes(option)} />
                 {option}
               </MenuItem>
             ))}

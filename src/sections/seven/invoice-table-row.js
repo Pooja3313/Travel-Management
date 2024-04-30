@@ -33,7 +33,7 @@ export default function InvoiceTableRow({
   onEditRow,
   onDeleteRow,
 }) {
-  const { invoiceNumber,EmpID, from, to, startDate, endDate, status, invoiceTo, totalAmount } = row;
+  const { invoiceNumber,EmpID, from, to, dueDate, createDate, status, invoiceTo, subTotal } = row;
 
   const confirm = useBoolean();
 
@@ -73,10 +73,9 @@ export default function InvoiceTableRow({
         <TableCell>{EmpID}</TableCell>
         <TableCell>{from}</TableCell>
         <TableCell>{to}</TableCell>
-        <TableCell>{startDate}</TableCell>
-        <TableCell>{endDate}</TableCell>
+    
 
-        {/* <TableCell>
+        <TableCell>
           <ListItemText
             primary={format(new Date(createDate), 'dd MMM yyyy')}
             secondary={format(new Date(createDate), 'p')}
@@ -87,9 +86,9 @@ export default function InvoiceTableRow({
               typography: 'caption',
             }}
           />
-        </TableCell> */}
+        </TableCell>
 
-        {/* <TableCell>
+        <TableCell>
           <ListItemText
             primary={format(new Date(dueDate), 'dd MMM yyyy')}
             secondary={format(new Date(dueDate), 'p')}
@@ -100,9 +99,9 @@ export default function InvoiceTableRow({
               typography: 'caption',
             }}
           />
-        </TableCell> */}
+        </TableCell>
 
-        <TableCell>{fCurrency(totalAmount)}</TableCell>
+        <TableCell>{fCurrency(subTotal)}</TableCell>
 
         {/* <TableCell align="center">{sent}</TableCell> */}
 

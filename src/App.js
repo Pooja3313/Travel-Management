@@ -5,7 +5,8 @@ import 'simplebar-react/dist/simplebar.min.css';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 // ----------------------------------------------------------------------
-
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // routes
 import Router from 'src/routes/sections';
 // theme
@@ -37,7 +38,9 @@ export default function App() {
   useScrollToTop();
 
   return (
+   
     <AuthProvider>
+       <LocalizationProvider dateAdapter={AdapterDateFns}>
       <SettingsProvider
         defaultSettings={{
           themeMode: 'light', // 'light' | 'dark'
@@ -60,6 +63,7 @@ export default function App() {
           </MotionLazy>
         </ThemeProvider>
       </SettingsProvider>
+      </LocalizationProvider>
     </AuthProvider>
   );
 }

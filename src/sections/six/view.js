@@ -20,11 +20,11 @@ export default function SixView() {
         links={[
           {
             name: 'Dashboard',
-            href: paths.dashboard.group.root,
+            href: paths.dashboard.users.root,
           },
           {
             name: 'Invoice',
-            href: paths.dashboard.group.six,
+            href: paths.dashboard.users.six,
           },
           {
             name: 'New Invoice',

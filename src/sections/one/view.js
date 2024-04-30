@@ -1,6 +1,7 @@
 import isEqual from 'lodash/isEqual';
 import { useState, useCallback } from 'react';
 // @mui
+import Grid from '@mui/material/Unstable_Grid2';
 import { alpha } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -17,7 +18,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 // _mock
-import { _EmpList,_roles ,USER_STATUS_OPTIONS } from 'src/_mock';
+import { _EmpList,_invoices,_role ,USER_STATUS_OPTIONS } from 'src/_mock';
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
 import Label from 'src/components/label';
@@ -40,6 +41,8 @@ import {
 import UserTableRow from './user-table-row';
 import UserTableToolbar from './user-table-toolbar';
 import UserTableFiltersResult from './user-table-filters-result';
+import AnalyticsWidgetSummary from './analytics-widget-summary';
+import SevenView from './Reimburse_View ';
 
 // ----------------------------------------------------------------------
 
@@ -47,9 +50,9 @@ const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
   
-  { id: 'EmpID', label: ' EmpID', width: 50  },
+  { id: 'EmpID', label: ' EmpID', width: 50 },
   { id: 'EmpName', label: 'EmpName', width:50 },
-  { id: 'roles', label: 'Roles', width: 50 },
+  { id: 'role', label: 'Roles', width: 50 },
   { id: 'department', label: 'Department', width: 50 }, 
   { id: 'projectTitle', label: 'ProjectTitle', width: 50 }, 
   { id: 'from', label: 'From', width: 50 },
@@ -67,7 +70,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   EmpName: '',
-  roles: [],
+  role: [],
   status: 'all',
 };
 
@@ -135,12 +138,7 @@ export default function FourView() {
     });
   }, [dataFiltered.length, dataInPage.length, table, tableData]);
 
-  // const handleEditRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.group.six(id));
-  //   },
-  //   [router]
-  // );
+  
 
   const handleFilterStatus = useCallback(
     (event, newValue) => {
@@ -157,19 +155,60 @@ export default function FourView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="DashBoard"
+          heading="Travel Trip List"
           links={[
-            { name: 'HOD_Dashboard', href: paths.dashboard.root },
-            // { name: 'employee', href: paths.dashboard.group.four },
-           
+          // { name: 'Dashboard', href: paths.dashboard.group.root },
+          //  { name: 'TripList', href: paths.dashboard.group.five},
+           { name: 'List'},
+          
+            
           ]}
-        
+      
           sx={{
             mb: { xs: 3, md: 5 },
           }}
         />
+ 
+ <Grid container spacing={3}>
+        <Grid xs={12} sm={6} md={3}>
+          <AnalyticsWidgetSummary
+            title="All Status"
+            total={20}
+            color="info"
+            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+          />
+        </Grid>
+
+        <Grid xs={12} sm={6} md={3}>
+          <AnalyticsWidgetSummary
+            title="Approve"
+            total={6}
+            color="success"
+            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+          />
+        </Grid>
+
+        <Grid xs={12} sm={6} md={3}>
+          <AnalyticsWidgetSummary
+            title="Pending"
+            total={10}
+            color="warning"
+            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+          />
+        </Grid>
+
+        <Grid xs={12} sm={6} md={3}>
+          <AnalyticsWidgetSummary
+            title="Reject"
+            total={4}
+            color="error"
+            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+          />
+        </Grid>
+        </Grid>
 
         <Card>
+        
           <Tabs
             value={filters.status}
             onChange={handleFilterStatus}
@@ -190,33 +229,32 @@ export default function FourView() {
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
                     color={
-                      (tab.value === 'active' && 'success') ||
+                      (tab.value === 'approve' && 'success') ||
                       (tab.value === 'pending' && 'warning') ||
-                      (tab.value === 'banned' && 'error') ||
+                      (tab.value === 'reject' && 'error') ||
                       'default'
                     }
                   >
                     {tab.value === 'all' && _EmpList.length}
-                    {tab.value === 'active' &&
-                      _EmpList.filter((user) => user.status === 'active').length}
-
+                    
                     {tab.value === 'pending' &&
                       _EmpList.filter((user) => user.status === 'pending').length}
-                    {tab.value === 'banned' &&
-                      _EmpList.filter((user) => user.status === 'banned').length}
-                    {tab.value === 'rejected' &&
-                      _EmpList.filter((user) => user.status === 'rejected').length}
+                    {tab.value === 'approve' &&
+                      _EmpList.filter((user) => user.status === 'approve').length}
+                    {tab.value === 'reject' &&
+                      _EmpList.filter((user) => user.status === 'reject').length}
                   </Label>
                 }
               />
             ))}
           </Tabs>
+      
 
           <UserTableToolbar
             filters={filters}
             onFilters={handleFilters}
             //
-            roleOptions={_roles}
+            roleOptions={_role}
           />
 
           {canReset && (
@@ -281,7 +319,7 @@ export default function FourView() {
                         selected={table.selected.includes(row.id)}
                         onSelectRow={() => table.onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
-                        
+                        // onEditRow={() => handleEditRow(row.id)}
                       />
                     ))}
 
@@ -331,6 +369,10 @@ export default function FourView() {
           </Button>
         }
       />
+
+      <Grid xs={12} md={6} lg={8} style={{ marginTop: '100px' }}>
+          <SevenView title="Reimbursement" list={_invoices} />
+        </Grid>
     </>
   );
 }
@@ -338,7 +380,7 @@ export default function FourView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters }) {
-  const { EmpName, status, roles } = filters;
+  const { EmpName, status, role } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -360,8 +402,8 @@ function applyFilter({ inputData, comparator, filters }) {
     inputData = inputData.filter((user) => user.status === status);
   }
 
-  if (roles.length) {
-    inputData = inputData.filter((user) => roles.includes(user.roles));
+  if (role.length) {
+    inputData = inputData.filter((user) => role.includes(user.role));
   }
 
   return inputData;

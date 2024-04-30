@@ -46,18 +46,9 @@ export default function UserNewEditForm({ currentUser }) {
     EmpID: Yup.string().required('Emp_ID is required'),
     roles: Yup.string().required('Role is required'),
     department: Yup.string().required('Department is required'),
-    projectTitle: Yup.string().required('Project Title is required'),
-    from: Yup.string().required('Destination is required'),
-    to: Yup.string().required('Destination is required'),
-    startDate: Yup.date().required('Start Date is required'),
-    endDate: Yup.date().required('End Date is required'),
-    purpose: Yup.string().required('Trip Purpose is required'),
-    accommodation: Yup.string().required('Accommodation is required'),
-    transportation: Yup.string().required('Transportation Name is required'),
-    FoodNeededs: Yup.string().required('Need Food Facility is required'),
-    foodOption: Yup.array().min(1, 'Choose at least one option'),
-     status: Yup.string(),
-    isVerified: Yup.boolean(),
+    
+    
+    
   });
 
   const defaultValues = useMemo(
@@ -66,18 +57,6 @@ export default function UserNewEditForm({ currentUser }) {
       EmpID: currentUser?.EmpID || '',
       department: currentUser?.department || '',
       projectTitle: currentUser?.projectTitle || '',
-      from: currentUser?.from || '',
-      to: currentUser?.to || '',
-      startDate: currentUser?.startDate || '',
-      endDate: currentUser?.endDate || '',
-      purpose: currentUser?.purpose || '',
-      accommodation: currentUser?.accommodation,
-      transportation: currentUser?.transportation || '',
-      roles: currentUser?.roles || '',
-      status: currentUser?.status || '',
-      FoodNeededs: currentUser?.FoodNeededs || '',
-      foodOption: currentUser?.foodOption || [],
-      isVerified: currentUser?.isVerified || true,
      
     }),
     [currentUser]
@@ -143,72 +122,7 @@ export default function UserNewEditForm({ currentUser }) {
              
 
               <>
-                <RHFTextField name="from" label="From Destination" />
-                <RHFTextField name="to" label="To Destination" />
-                <RHFTextField name="startDate" label="Start Date" />
-                <RHFTextField name="endDate" label="End Date" />
-                <RHFTextField name="projectTitle" label="Project Title" />
-                <RHFTextField name="purpose" label="purpose" />
-
-                <RHFAutocomplete
-                  name="accommodation"
-                  label="Accommodations"
-                  autoHighlight
-                  options={_accommodation.map((option) => option)}
-                  getOptionLabel={(option) => option}
-                  renderOption={(props, option) => (
-                    <li {...props} key={option}>
-                      {option}
-                    </li>
-                  )}
-                />
-
-                <RHFAutocomplete
-                  name="transportation"
-                  label="Transportation"
-                  autoHighlight
-                  options={_transportation.map((option) => option)}
-                  getOptionLabel={(option) => option}
-                  renderOption={(props, option) => (
-                    <li {...props} key={option}>
-                      {option}
-                    </li>
-                  )}
-                />
-                <RHFRadioGroup
-                  row
-                  name="FoodNeededs"
-                  label="Food Needed"
-                  spacing={4}
-                  options={_foodNeeded}
-                />
-                {values.FoodNeededs === 'yes' && (
-                  <RHFAutocomplete
-                    name="foodOption"
-                    placeholder="+ FoodOption"
-                    multiple
-                    disableCloseOnSelect
-                    options={_foodOption.map((option) => option)}
-                    getOptionLabel={(option) => option}
-                    renderOption={(props, option) => (
-                      <li {...props} key={option}>
-                        {option}
-                      </li>
-                    )}
-                    renderTags={(selected, getTagProps) =>
-                      selected.map((option, index) => (
-                        <Chip
-                          {...getTagProps({ index })}
-                          key={option}
-                          label={option}
-                          size="small"
-                          color="info"
-                          variant="soft"
-                        />
-                      ))
-                    }
-                  />
-                )}
+                
               </>
               {/* )} */}
             </Box>

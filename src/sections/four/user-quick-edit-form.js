@@ -27,7 +27,7 @@ import {
   _foodOption,
   // _pay,
   USER_STATUS_OPTIONS,
-  _roles,
+  _role,
 } from 'src/_mock';
 
 // components
@@ -45,15 +45,15 @@ import { useRouter } from 'src/routes/hooks';
 // ----------------------------------------------------------------------
 
 export default function UserQuickEditForm({ currentUser, open, onClose }) {
-  // const router = useRouter();
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
   const NewEmployeeSchema = Yup.object().shape({
     EmpName: Yup.string().required('Name is required'),
     EmpID: Yup.string().required('Emp_ID is required'),
-    roles: Yup.string().required('Role is required'),
+    role: Yup.string().required('Role is required'),
     department: Yup.string().required('Department is required'),
-    Payment: Yup.string().required('Payment is required'),
+    // Payment: Yup.string().required('Payment is required'),
     projectTitle: Yup.string().required('Project Title is required'),
     from: Yup.string().required('Destination is required'),
     to: Yup.string().required('Destination is required'),
@@ -74,7 +74,7 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
       EmpName: currentUser?.EmpName || '',
       EmpID: currentUser?.EmpID || '',
       department: currentUser?.department || '',
-      Payment: currentUser?.Payment || '',
+      // Payment: currentUser?.Payment || '',
       projectTitle: currentUser?.projectTitle || '',
       from: currentUser?.from || '',
       to: currentUser?.to || '',
@@ -83,7 +83,7 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
       purpose: currentUser?.purpose || '',
       accommodation: currentUser?.accommodation,
       transportation: currentUser?.transportation || '',
-      roles: currentUser?.roles || '',
+      role: currentUser?.role || '',
       status: currentUser?.status || '',
       FoodNeededs: currentUser?.FoodNeededs || '',
       foodOption: currentUser?.foodOption || [],
@@ -111,7 +111,7 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
       reset();
       onClose();
       enqueueSnackbar('Update success!');
-      // router.push(paths.dashboard.group.root);
+      router.push(paths.dashboard.group.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
@@ -159,10 +159,10 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
             <RHFTextField name="EmpID" label="Employee ID" />
             <RHFTextField name="department" label="Department" />
             <RHFAutocomplete
-                name="roles"
+                name="role"
                 label="Role"
                 autoHighlight
-                options={_roles.map((option) => option)}
+                options={_role.map((option) => option)}
                 getOptionLabel={(option) => option}
                 renderOption={(props, option) => (
                   <li {...props} key={option}>

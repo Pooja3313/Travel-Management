@@ -16,7 +16,6 @@ import { _addressBooks } from 'src/_mock';
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
 import FormProvider from 'src/components/hook-form';
-import { useSnackbar } from 'src/components/snackbar';
 //
 import InvoiceNewEditDetails from './invoice-new-edit-details';
 import InvoiceNewEditAddress from './invoice-new-edit-address';
@@ -26,8 +25,7 @@ import InvoiceNewEditStatusDate from './invoice-new-edit-status-date';
 
 export default function InvoiceNewEditForm({ currentInvoice }) {
   const router = useRouter();
-  // const currency = 'INR';
-  const { enqueueSnackbar } = useSnackbar();
+  const currency = 'INR';
   const loadingSave = useBoolean();
 
   const loadingSend = useBoolean();
@@ -39,21 +37,20 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     from: Yup.string().required('Destination is required'),
 
     to: Yup.string().required('Destination is required'),
-    // startDate: Yup.date().required('Start Date is required'),
-    // endDate: Yup.date().required('End Date is required'),
+    startDate: Yup.date().required('Start Date is required'),
+    endDate: Yup.date().required('End Date is required'),
     coverUrl: Yup.string(),
-    UploadFile: Yup.mixed().required('File is required'),
-    createDate: Yup.mixed().nullable().required('Create date is required'),
-    dueDate: Yup.mixed()
-      .required('Due date is required')
-      .test(
-        'date-min',
-        'Due date must be later than create date',
-        (value, { parent }) => value.getTime() > parent.createDate.getTime()
-      ),
+    // createDate: Yup.mixed().nullable().required('Create date is required'),
+    // dueDate: Yup.mixed()
+    //   .required('Due date is required')
+    //   .test(
+    //     'date-min',
+    //     'Due date must be later than create date',
+    //     (value, { parent }) => value.getTime() > parent.createDate.getTime()
+    //   ),
 
     // not required
-
+    
     // taxes: Yup.number(),
     status: Yup.string(),
     // discount: Yup.number(),
@@ -70,27 +67,25 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       EmpID: currentInvoice?.EmpID || '',
       from: currentInvoice?.from || '',
       to: currentInvoice?.to || '',
-      // startDate: currentInvoice?.startDate || '',
-      // endDate: currentInvoice?.endDate || '',
-      createDate: currentInvoice?.createDate || new Date(),
-      dueDate: currentInvoice?.dueDate || null,
+      startDate:currentInvoice?.startDate || '',
+      endDate: currentInvoice?.endDate || '',
+      // createDate: currentInvoice?.createDate || new Date(),
+      // dueDate: currentInvoice?.dueDate || null,
       // taxes: currentInvoice?.taxes || 0,
       // shipping: currentInvoice?.shipping || 0,
       status: currentInvoice?.status || 'draft',
       // discount: currentInvoice?.discount || 0,
       invoiceFrom: currentInvoice?.invoiceFrom || _addressBooks[0],
       invoiceTo: currentInvoice?.invoiceTo || null,
-
-      UploadFile: currentInvoice?.UploadFile || '',
       items: currentInvoice?.items || [
         {
           title: '',
           service: '',
-          coverUrl: '',
+          coverUrl:'',
           quantity: 1,
           price: 0,
           total: 0,
-          // currency,
+          currency,
         },
       ],
       // totalAmount: currentInvoice?.totalAmount || 0,
@@ -105,10 +100,11 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
 
   const {
     reset,
+
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
-  console.log('errors:', errors);
+console.log('errors:',errors);
   const handleSaveAsDraft = handleSubmit(async (data) => {
     loadingSave.onTrue();
 
@@ -116,7 +112,6 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       loadingSave.onFalse();
-      enqueueSnackbar('save the draft successfully!');
       router.push(paths.dashboard.users.root);
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
@@ -132,7 +127,6 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       loadingSend.onFalse();
-      enqueueSnackbar('Update success!');
       router.push(paths.dashboard.users.root);
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {

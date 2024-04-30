@@ -1,31 +1,24 @@
-
 // @mui
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
+// routes
+import { paths } from 'src/routes/paths';
 // components
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+//
+import UserNewEditForm from './user-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function ThreeView() {
+export default function ZeroView() {
   const settings = useSettingsContext();
+  
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Typography variant="h4"> Page Three </Typography>
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      
 
-      <Box
-        sx={{
-          mt: 5,
-          width: 1,
-          height: 320,
-          borderRadius: 2,
-          bgcolor: (theme) => alpha(theme.palette.grey[500], 0.04),
-          border: (theme) => `dashed 1px ${theme.palette.divider}`,
-        }}
-      />
+      <UserNewEditForm />
     </Container>
   );
 }

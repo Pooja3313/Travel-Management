@@ -175,7 +175,7 @@ export const _lastNames = [
 // ----------------------------------------------------------------------
 
 export const _prices = [
-  83.74, 97.14, 68.71, 85.21, 52.17, 25.18, 43.84, 60.98, 98.42, 53.37, 72.75, 56.61, 64.55, 77.32,
+  83, 97, 68.71, 85.21, 52.17, 25.18, 43.84, 60.98, 98.42, 53.37, 72.75, 56.61, 64.55, 77.32,
   60.62, 79.81, 93.68, 47.44, 76.24, 92.87, 72.91, 20.54, 94.25, 37.51,
 ];
 
@@ -297,30 +297,26 @@ export const _postTitles = [
 // ----------------------------------------------------------------------
 
 export const _productNames = [
-  'Nike Air Force 1 NDESTRUKT',
-  'Foundations Matte Flip Flop',
-  'Nike Air Zoom Pegasus 37 A.I.R. Chaz Bear',
-  'Arizona Soft Footbed Sandal',
-  'Boston Soft Footbed Sandal',
-  'Zoom Freak 2',
-  'Gazelle Vintage low-top sneakers',
-  'Jordan Delta',
-  'Air Jordan XXXV PF',
-  'Rod Laver low-top sneakers',
-  'Kyrie 7 EP Sisterhood',
-  'Pharrell Williams Human Race NMD sneakers',
-  'Nike Blazer Low 77 Vintage',
-  'ASMC Winter Boot Cold.Rdy',
-  'ZX 8000 Lego sneakers',
-  'Ultraboost 21 sneakers',
-  '2750 Cotu Classic Sneaker',
-  'ZX 9000 A-ZX Series sneakers',
-  'Madrid Big Buckle Sandal',
-  'Chuck 70 Hi Sneaker',
-  'Relaxed Adjustable Strap Slingback Sandal',
-  'Superturf Adventure X Atmos',
-  'Chuck Taylor All Star Lift Sneaker',
-  'Run Star Hike Platform Sneaker',
+  'Food Expense - Breakfast',
+  'Food Expense - Lunch',
+  'Food Expense - Dinner',
+  'Snack Purchase',
+  'Coffee Break',
+  'Restaurant Dinner',
+  'Grocery Shopping',
+  'Fast Food Meal',
+  'Outdoor Dining',
+  'Entertainment - Movie Ticket',
+  'Entertainment - Theme Park',
+  'Entertainment - Concert Ticket',
+  'Sports Activity Fee',
+  'Gym Membership',
+  'Transportation - Taxi Fare',
+  'Transportation - Public Transit',
+  'Hotel Accommodation',
+  'Office Supplies Purchase',
+  'Conference Registration Fee',
+  'Professional Development Course',
 ];
 
 // ----------------------------------------------------------------------
@@ -513,6 +509,7 @@ export const _descriptions = [
   `Ipsam aliquam velit nobis repellendus officiis aut deserunt id et. Nihil sunt aut dolores aut. Dolores est ipsa quia et laborum quidem laborum accusamus id. Facilis odit quod hic laudantium saepe omnis nisi in sint. Sed cupiditate possimus id.`,
   `Magnam non eveniet optio optio ut aliquid atque. Velit libero aspernatur quis laborum consequatur laudantium. Tempora facere optio fugit accusantium ut. Omnis aspernatur reprehenderit autem esse ut ut enim voluptatibus.`,
 ];
+
 export const _EmpID = [
   '001',
   '002',
@@ -571,6 +568,29 @@ export const _roles = [
   'Technical Support Specialist',
   'Marketing Specialist'
 ];
+export const _UploadFile = [
+  '21cp324.pdf',
+  '21cp325.pdf',
+  '21cp326.pdf',
+  '21cp327.pdf',
+  '21cp328.pdf',
+  '21cp329.pdf',
+  '21cp330.pdf',
+  '21cp331.pdf',
+  '21cp332.pdf',
+  '21cp333.pdf',
+  '21cp334.pdf',
+  '21cp335.pdf',
+  '21cp336.pdf',
+  '21cp337.pdf',
+  '21cp338.pdf',
+  '21cp339.pdf',
+  '21cp340.pdf',
+  '21cp341.pdf',
+  '21cp342.pdf',
+  '21cp343.pdf',
+];
+
 
 export const _department = [
   'Engineering',

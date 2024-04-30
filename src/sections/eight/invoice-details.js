@@ -18,14 +18,13 @@ import TableContainer from '@mui/material/TableContainer';
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 // _mock
-import { _invoices, INVOICE_STATUS_OPTIONS } from 'src/_mock';
+import { _invoices, _UploadFile, INVOICE_STATUS_OPTIONS } from 'src/_mock';
 // components
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
 //
 import Image from 'src/components/image';
 import InvoiceToolbar from './invoice-toolbar';
-
 
 // ----------------------------------------------------------------------
 
@@ -42,23 +41,50 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function InvoiceDetails({ invoice }) {
   const [currentStatus, setCurrentStatus] = useState(invoice.status);
- 
+
   const handleChangeStatus = useCallback((event) => {
     setCurrentStatus(event.target.value);
   }, []);
 
+  const renderImages = (coverUrl) => {
+    if (Array.isArray(coverUrl)) {
+      return (
+        <Stack spacing={0.5} direction="row" sx={{ p: (theme) => theme.spacing(1, 1, 0, 1) }}>
+          <Stack spacing={0.5}>
+            {coverUrl.map((url, index) => (
+              <Image
+                key={index}
+                alt={`Cover Image ${index}`}
+                src={url}
+                ratio="1/1"
+                sx={{ borderRadius: 1, width: 80 }}
+              />
+            ))}
+          </Stack>
+        </Stack>
+      );
+    }
 
- const renderImages = (coverUrl) => (
-    <Stack spacing={0.5} direction="row" sx={{ p: (theme) => theme.spacing(1, 1, 0, 1) }}>
-      <Stack spacing={0.5}>
-        <Image alt="Cover Image" src={coverUrl} ratio="1/1" sx={{ borderRadius: 1, width: 80 }} />
-      </Stack>
-    </Stack>
-  );
-  
+    if (typeof coverUrl === 'string') {
+      return (
+        <Stack spacing={0.5} direction="row" sx={{ p: (theme) => theme.spacing(1, 1, 0, 1) }}>
+          <Stack spacing={0.5}>
+            <Image
+              alt="Cover Image"
+              src={coverUrl}
+              ratio="1/1"
+              sx={{ borderRadius: 1, width: 80 }}
+            />
+          </Stack>
+        </Stack>
+      );
+    }
+
+    return <Typography variant="body2">No image available</Typography>;
+  };
+
   const renderTotal = (
     <>
-     
       <StyledTableRow>
         <TableCell colSpan={3} />
         <TableCell sx={{ typography: 'subtitle1' }}>SubTotal</TableCell>
@@ -66,9 +92,24 @@ export default function InvoiceDetails({ invoice }) {
           {fCurrency(invoice.subTotal)}
         </TableCell>
       </StyledTableRow>
-   
     </>
   );
+  const ProjectReport = (
+    <>
+      <StyledTableRow>
+        {/* Adjusted alignment and width for the cells */}
+        <TableCell colSpan={0.5} />
+        <TableCell align="left" width={200} sx={{ typography: 'subtitle1' }}>
+          Trip Report:
+        </TableCell>
+       
+        <TableCell align="left" width={100} sx={{ typography: 'subtitle1' }}>
+          {invoice.UploadFile}
+        </TableCell>
+      </StyledTableRow>
+    </>
+  );
+  
   const renderList = (
     <TableContainer sx={{ overflow: 'unset', mt: 5 }}>
       <Scrollbar>
@@ -78,8 +119,7 @@ export default function InvoiceDetails({ invoice }) {
               <TableCell width={40}>#</TableCell>
 
               <TableCell sx={{ typography: 'subtitle2' }}>Title</TableCell>
-              <TableCell >Upload File</TableCell>
-             
+              <TableCell>Upload File</TableCell>
 
               <TableCell align="center">Qty</TableCell>
 
@@ -100,14 +140,14 @@ export default function InvoiceDetails({ invoice }) {
                   </Box>
                 </TableCell>
                 <TableCell>{renderImages(row.coverUrl)}</TableCell>
-               <TableCell align="center">{row.quantity}</TableCell>
+                <TableCell align="center">{row.quantity}</TableCell>
 
                 <TableCell align="center">{fCurrency(row.price)}</TableCell>
 
                 <TableCell align="center">{fCurrency(row.price * row.quantity)}</TableCell>
               </TableRow>
             ))}
-
+            {ProjectReport}
             {renderTotal}
           </TableBody>
         </Table>
@@ -184,41 +224,39 @@ export default function InvoiceDetails({ invoice }) {
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               Employee ID
             </Typography>
-            {(invoice.EmpID)}
+            {invoice.EmpID}
           </Stack>
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               From Destination
             </Typography>
-            {(invoice.from)}
+            {invoice.from}
           </Stack>
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               To Destination
             </Typography>
-            {(invoice.to)}
+            {invoice.to}
           </Stack>
-          
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               Start Date
             </Typography>
-            {(invoice.startDate)}
+            {invoice.startDate}
           </Stack>
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               End Date
             </Typography>
-            {(invoice.endDate)}
+            {invoice.endDate}
           </Stack>
         </Box>
 
         {renderList}
 
         <Divider sx={{ mt: 5, borderStyle: 'dashed' }} />
-
       </Card>
     </>
   );

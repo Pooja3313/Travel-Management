@@ -14,7 +14,9 @@ import Iconify from 'src/components/iconify';
 export default function UserTableFiltersResult({
   filters,
   onFilters,
+  //
   onResetFilters,
+  //
   results,
   ...other
 }) {
@@ -23,8 +25,8 @@ export default function UserTableFiltersResult({
   };
 
   const handleRemoveRole = (inputValue) => {
-    const newValue = filters.roles.filter((item) => item !== inputValue);
-    onFilters('roles', newValue);
+    const newValue = filters.role.filter((item) => item !== inputValue);
+    onFilters('role', newValue);
   };
 
   return (
@@ -43,20 +45,14 @@ export default function UserTableFiltersResult({
           </Block>
         )}
 
-        {!!filters.roles.length && (
-          <Block label="Roles:">
-            {filters.roles.map((item) => (
+        {!!filters.role.length && (
+          <Block label="Role:">
+            {filters.role.map((item) => (
               <Chip key={item} label={item} size="small" onDelete={() => handleRemoveRole(item)} />
             ))}
           </Block>
         )}
-        {/* {!!filters.roles.length && (
-          <Block label="Roles:">
-            {filters.roles.map((item) => (
-              <Chip key={item} label={item} size="small" onDelete={() => handleRemoveRole(item)} />
-            ))}
-          </Block>
-        )} */}
+       
 
         <Button
           color="error"

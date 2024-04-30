@@ -52,6 +52,7 @@ export default function UserTableFiltersResult({
             ))}
           </Block>
         )}
+       
 
         <Button
           color="error"
