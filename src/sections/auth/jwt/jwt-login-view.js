@@ -15,7 +15,9 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 import { useSearchParams, useRouter } from 'src/routes/hooks';
 // config
-import { PATH_AFTER_LOGIN } from 'src/config-global';
+// import { PATH_AFTER_LOGIN } from 'src/config-global';
+import { PATH_AFTER_LOGINROOT } from 'src/config-global';
+
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // auth
@@ -44,14 +46,19 @@ export default function JwtLoginView() {
     password: Yup.string().required('Password is required'),
   });
 
-  const defaultValues = {
-    email: 'demo@minimals.cc',
-    password: 'demo1234',
+  // const defaultValues = {
+  //   email: 'demo@minimals.cc',
+  //   password: 'demo1234',
+  // };
+    const defaultRootValues = {
+    email: 'employee@minimals.cc',
+    password: 'employee1234',
   };
 
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
-    defaultValues,
+    // defaultValues,
+    defaultRootValues,
   });
 
   const {
@@ -64,7 +71,12 @@ export default function JwtLoginView() {
     try {
       await login?.(data.email, data.password);
 
-      router.push(returnTo || PATH_AFTER_LOGIN);
+      // router.push(returnTo || PATH_AFTER_LOGIN);
+
+      if(data.email === defaultRootValues.email ){
+
+        router.push(returnTo || PATH_AFTER_LOGINROOT);
+      }
     } catch (error) {
       console.error(error);
       reset();
