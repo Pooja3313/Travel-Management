@@ -102,11 +102,12 @@ export default function JwtLoginView() {
     <Stack spacing={2.5}>
       {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
-      <RHFTextField name="email" label="Email address" />
+      <RHFTextField name="email" label="Email address"  value="demo@minimals.cc" />
 
       <RHFTextField
         name="password"
         label="Password"
+        value="demo1234"
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
